@@ -1,0 +1,277 @@
+import type { Trip } from "./trip.types";
+
+export const TRIP: Trip = {
+  title: "Crète",
+  subtitle: "10 jours, tour complet de l'île",
+  dates: "21 — 30 avril 2026",
+  travelers: 5,
+  totalPhotos: 170,
+  totalKm: 1290,
+  bbox: { minLat: 34.95, maxLat: 35.62, minLng: 23.55, maxLng: 26.30 },
+  days: [
+    {
+      id: 1, date: "21 avr", weekday: "Mar",
+      stage: "Héraklion",
+      title: "Arrivée en Crète",
+      summary: "Atterrissage à Héraklion en milieu de journée, installation et premières ruelles autour de la Loggia.",
+      km: 8,
+      places: [
+        {
+          id: "p1a", name: "Vieille ville d'Héraklion", lat: 35.3398, lng: 25.1346,
+          kind: "ville",
+          context: "Capitale de la Crète depuis l'époque vénitienne. Sa Loggia, reconstruite pierre par pierre après les bombardements de 1941, accueillait jadis les nobles vénitiens.",
+          mediaCount: 1,
+        },
+      ],
+    },
+    {
+      id: 2, date: "22 avr", weekday: "Mer",
+      stage: "Héraklion",
+      title: "Fort, musée & déjeuner crétois",
+      summary: "Visite du fort vénitien (Koules) et du musée archéologique d'Héraklion. Entre les deux, déjeuner dans un petit restaurant typique où on nous a emmenés en cuisine choisir nos plats.",
+      km: 6,
+      places: [
+        {
+          id: "p2a", name: "Fort vénitien & musée archéologique", lat: 35.3406, lng: 25.1367,
+          kind: "musée",
+          context: "Visite du fort vénitien (Koules) qui garde l'entrée du port, et du musée archéologique d'Héraklion — la plus grande collection d'art minoen au monde (fresques de Knossos, disque de Phaistos, déesse aux serpents). Entre les deux, déjeuner dans un petit restaurant typique où l'on nous a emmenés en cuisine choisir nos plats.",
+          mediaCount: 22,
+        },
+      ],
+    },
+    {
+      id: 3, date: "23 avr", weekday: "Jeu",
+      stage: "Vers l'ouest",
+      title: "L'Ida & Réthymnon",
+      summary: "Longue route vers l'ouest par les montagnes : pause panoramique en chemin, grotte de l'Ida (où Zeus fut élevé), vieux port de Réthymnon, arrivée à La Canée le soir.",
+      km: 220,
+      places: [
+        {
+          id: "p3a", name: "Route de montagne vers l'Ida", lat: 35.2518, lng: 24.8919,
+          kind: "nature",
+          context: "Simple pause panoramique sur la belle route de montagne menant à la grotte de l'Ida. Vues sur le massif et les pâturages d'altitude.",
+          mediaCount: 1,
+        },
+        {
+          id: "p3b", name: "Grotte de l'Ida (Ideon Andron)", lat: 35.2073, lng: 24.8315,
+          kind: "site",
+          context: "Selon la légende, c'est ici que Zeus enfant fut élevé par la chèvre Amalthée, à l'abri de Cronos qui dévorait ses enfants. Sanctuaire dès 3000 av. J.-C., culte attesté jusqu'à l'époque romaine.",
+          mediaCount: 4,
+        },
+        {
+          id: "p3c", name: "Axos & route de montagne", lat: 35.3109, lng: 24.8454,
+          kind: "village",
+          context: "Hameau de pierre sèche sur la route de retour vers la côte. Vues plongeantes sur les vallées du massif de l'Ida.",
+          mediaCount: 3,
+        },
+        {
+          id: "p3e", name: "Vieux port de Réthymnon", lat: 35.3699, lng: 24.4747,
+          kind: "ville",
+          context: "Phare égyptien de 1830, quais bordés de tavernes et forteresse vénitienne dominant la baie. La ville a connu Vénitiens, Ottomans puis Égyptiens — chaque dynastie a laissé son empreinte. Arrêt en chemin sur la côte près de Panormos.",
+          mediaCount: 4,
+        },
+      ],
+    },
+    {
+      id: 4, date: "24 avr", weekday: "Ven",
+      stage: "La Canée",
+      title: "Péninsule d'Akrotiri",
+      summary: "Découverte de la presqu'île au nord de La Canée : monastères orthodoxes adossés à la falaise, retour pour le coucher de soleil sur le port vénitien.",
+      km: 35,
+      places: [
+        {
+          id: "p4a", name: "Monastères d'Akrotiri", lat: 35.5606, lng: 24.1353,
+          kind: "monument",
+          context: "Les monastères d'Agia Triada et de Gouverneto, fondés au XVIᵉ et XIᵉ siècles, dominent la péninsule sauvage d'Akrotiri. Gouverneto, le plus ancien de Crète encore actif, niché dans une gorge descendant à la mer.",
+          mediaCount: 8,
+        },
+        {
+          id: "p4b", name: "Vieux port de La Canée", lat: 35.5173, lng: 24.0185,
+          kind: "ville",
+          context: "Phare vénitien du XVIᵉ siècle remodelé par les Égyptiens, mosquée des Janissaires, ruelles ottomanes et arsenaux de la Sérénissime. Le port le plus photogénique de Crète au coucher du soleil.",
+          mediaCount: 7,
+        },
+      ],
+    },
+    {
+      id: 5, date: "25 avr", weekday: "Sam",
+      stage: "La Canée",
+      title: "Aptera & Argyroupoli",
+      summary: "Site antique d'Aptera le matin puis village des sources d'Argyroupoli, avec ses platanes centenaires et ses cascades. Soirée à La Canée.",
+      km: 130,
+      places: [
+        {
+          id: "p5a", name: "Site antique d'Aptera", lat: 35.4624, lng: 24.1413,
+          kind: "site",
+          context: "Cité-état grecque puis romaine, surplombant la baie de Souda. Citernes voûtées, théâtre, monastère byzantin et fort ottoman cohabitent sur un plateau battu par les vents.",
+          mediaCount: 7,
+        },
+        {
+          id: "p5b", name: "Argyroupoli", lat: 35.2864, lng: 24.3348,
+          kind: "village",
+          context: "Le village est bâti sur l'antique Lappa. Une vingtaine de sources jaillissent à travers le bourg, faisant tourner d'anciens moulins et nourrissant les tavernes ombragées. Ne pas manquer la magnifique mosaïque romaine à l'entrée du village, vestige de Lappa.",
+          mediaCount: 2,
+        },
+        {
+          id: "p5c", name: "La Canée (soir)", lat: 35.5160, lng: 24.0175,
+          kind: "ville",
+          context: "Retour pour la nuit : raki, mezze de poisson et flânerie dans le quartier de Splantzia, l'ancien faubourg turc.",
+          mediaCount: 2,
+        },
+      ],
+    },
+    {
+      id: 6, date: "26 avr", weekday: "Dim",
+      stage: "De l'ouest au sud",
+      title: "Balos & traversée vers le sud",
+      summary: "Route et piste 4x4 jusqu'au lagon de Balos depuis La Canée, déjeuner à Kissamos, visite d'une fabrique d'huile d'olive et arrêt devant le plus vieil olivier de Crète, puis longue route à travers l'île jusqu'à la plaine de Messara.",
+      km: 360,
+      places: [
+        {
+          id: "p6a", name: "Lagon de Balos & Gramvoussa", lat: 35.5859, lng: 23.5956,
+          kind: "plage",
+          context: "Route depuis La Canée puis piste 4x4 jusqu'au parking, magnifique descente à pied vers le lagon turquoise. Sable rose dû au broyage des coquillages. La forteresse vénitienne de Gramvoussa, perchée à 137 m, fut le repaire des derniers résistants crétois au XIXᵉ siècle.",
+          mediaCount: 8,
+        },
+        {
+          id: "p6b", name: "Kissamos", lat: 35.5133, lng: 23.6084,
+          kind: "ville",
+          context: "Petite ville agricole connue pour son vin et ses oliveraies, en bord de la baie homonyme. Déjeuner mémorable au Gramboussa Restaurant, l'une des meilleures tables de la côte ouest.",
+          mediaCount: 4,
+        },
+        {
+          id: "p6c", name: "Biolea Astrikas Estate", lat: 35.4820, lng: 23.7950,
+          kind: "site",
+          context: "Fabrique d'huile d'olive bio à Ano Vouves, où les olives sont pressées à froid selon des méthodes traditionnelles. Visite des chais et dégustation.",
+          mediaCount: 5,
+        },
+        {
+          id: "p6d", name: "Olivier de Vouves", lat: 35.4868, lng: 23.7935,
+          kind: "nature",
+          context: "Le plus vieil olivier de Crète, probablement d'Europe : entre 3000 et 5000 ans selon les estimations. Toujours fructifère, son tronc noueux de 4,6 m de circonférence est classé monument naturel.",
+          mediaCount: 2,
+        },
+      ],
+    },
+    {
+      id: 7, date: "27 avr", weekday: "Lun",
+      stage: "Côte sud",
+      title: "Villa, Phaistos & Matala",
+      summary: "Réveil dans la villa avec vue infinie sur la plaine de Messara, journée minoenne (Phaistos, Agia Triada), baignade à Matala et visite du monastère d'Odigitria.",
+      km: 45,
+      places: [
+        {
+          id: "p7a", name: "Villa infinite vue", lat: 35.0778, lng: 24.8778,
+          kind: "site",
+          context: "Halte dans une villa perchée avec vue infinie sur la plaine de Messara et la mer de Libye. Couchers et levers de soleil mémorables.",
+          mediaCount: 7,
+        },
+        {
+          id: "p7b", name: "Palais de Phaistos", lat: 35.0515, lng: 24.8140,
+          kind: "site",
+          context: "Deuxième palais minoen de Crète après Knossos, mais resté intact des reconstructions modernes. C'est ici qu'a été trouvé le mystérieux disque de Phaistos, gravé d'un alphabet pictographique encore non déchiffré.",
+          mediaCount: 6,
+        },
+        {
+          id: "p7c", name: "Agia Triada", lat: 35.0336, lng: 24.7904,
+          kind: "site",
+          context: "Petite villa royale minoenne en contrebas de Phaistos. Plus modeste mais plus intime : c'est de là que viennent les célèbres rhytons en forme de tête de taureau et les fresques aux dauphins.",
+          mediaCount: 1,
+        },
+        {
+          id: "p7d", name: "Plage de Matala", lat: 34.9939, lng: 24.7491,
+          kind: "plage",
+          context: "Anse de sable bordée de falaises percées de tombes romaines. Joni Mitchell, Bob Dylan et Cat Stevens y ont vécu en communauté hippie en 1968-1971, dans les grottes elles-mêmes.",
+          mediaCount: 7,
+        },
+        {
+          id: "p7e", name: "Monastère d'Odigitria", lat: 34.9737, lng: 24.7999,
+          kind: "monument",
+          context: "Monastère fortifié du XIVᵉ s. caché dans les collines de l'Asterousia, refuge des résistants crétois pendant l'occupation turque puis allemande. Iconostase et fresques byzantines, tour de défense isolée.",
+          mediaCount: 8,
+        },
+      ],
+    },
+    {
+      id: 8, date: "28 avr", weekday: "Mar",
+      stage: "Vers l'est",
+      title: "Vers la Crète orientale",
+      summary: "Traversée vers l'est par l'autoroute du nord : pause à Kritsa pour son église byzantine, balade au bord du lac d'Agios Nikolaos, arrivée à Mochlos pour la nuit.",
+      km: 220,
+      places: [
+        {
+          id: "p8a", name: "Gorges & village de Kritsa", lat: 35.1674, lng: 25.6446,
+          kind: "village",
+          context: "Balade matinale dans les gorges de Kritsa, pique-nique au cœur du défilé, puis visite du village montagnard et de son écheveau de ruelles blanches. Église Panagia Kera (XIIIᵉ s.), tapissée des plus belles fresques byzantines de Crète. Tournage de \"Celui qui doit mourir\" de Jules Dassin (1957).",
+          mediaCount: 8,
+        },
+        {
+          id: "p8b", name: "Agios Nikolaos", lat: 35.1897, lng: 25.7193,
+          kind: "ville",
+          context: "Petite ville portuaire bâtie autour du lac Voulismeni, dont la légende prétend qu'il est sans fond et qu'Athéna et Artémis venaient s'y baigner. Connecté à la mer par un canal creusé en 1870.",
+          mediaCount: 5,
+        },
+        {
+          id: "p8c", name: "Mochlos", lat: 35.1849, lng: 25.9050,
+          kind: "village",
+          context: "Hameau de pêcheurs face à un îlot où subsistent des tombes minoennes. À table, on choisit son poisson dans le panier du caïque qui vient juste d'accoster.",
+          mediaCount: 1,
+        },
+      ],
+    },
+    {
+      id: 9, date: "29 avr", weekday: "Mer",
+      stage: "Crète orientale",
+      title: "Zakros & Toplou",
+      summary: "Pointe est de la Crète : balade et pique-nique dans les gorges des Morts, baignade sur la plage de Kato Zakros, monastère fortifié de Toplou. Dernière soirée à Mochlos autour d'un délicieux poisson grillé face à l'îlot minoen.",
+      km: 145,
+      places: [
+        {
+          id: "p9a", name: "Gorges des Morts & plage de Kato Zakros", lat: 35.1032, lng: 26.2385,
+          kind: "nature",
+          context: "Balade et pique-nique dans les gorges des Morts, où les Minoens enterraient leurs défunts dans les grottes de la paroi. Descente jusqu'à la plage de Kato Zakros pour la baignade, en contrebas des vestiges du palais minoen — le plus oriental et le seul découvert intact.",
+          mediaCount: 12,
+        },
+        {
+          id: "p9b", name: "Monastère de Toplou", lat: 35.2215, lng: 26.2162,
+          kind: "monument",
+          context: "Forteresse-monastère du XIVᵉ siècle, dont le nom turc \"Toplou\" signifie \"avec un canon\". Résistance aux pirates ottomans puis aux nazis : l'higoumène et plusieurs moines y furent fusillés en 1944 pour avoir hébergé un poste radio britannique.",
+          mediaCount: 6,
+        },
+      ],
+    },
+    {
+      id: 10, date: "30 avr", weekday: "Jeu",
+      stage: "Retour",
+      title: "Kavoussi, Spinalonga & départ",
+      summary: "Dernier jour : olivier millénaire de Kavoussi, île aux lépreux de Spinalonga depuis Plaka, visite du monastère Panagia Kera Kardiotissa, dernière baignade près de l'aéroport puis vol retour vers Lyon.",
+      km: 175,
+      places: [
+        {
+          id: "p10a", name: "Olivier de Kavoussi", lat: 35.1152, lng: 25.8606,
+          kind: "nature",
+          context: "Autre olivier millénaire de Crète, contemporain de celui de Vouves côté ouest. Toujours en production, son tronc creusé par les siècles tient lieu de petit musée naturel.",
+          mediaCount: 2,
+        },
+        {
+          id: "p10b", name: "Spinalonga & Plaka", lat: 35.2980, lng: 25.7377,
+          kind: "site",
+          context: "Forteresse vénitienne devenue léproserie de 1904 à 1957 — la dernière d'Europe. Inspira le roman de Victoria Hislop \"L'Île des oubliés\". On rejoint l'île en caïque depuis le hameau de Plaka, juste en face.",
+          mediaCount: 18,
+        },
+        {
+          id: "p10c", name: "Monastère Panagia Kera Kardiotissa", lat: 35.1930, lng: 25.4730,
+          kind: "monument",
+          context: "Monastère du XIIIᵉ s. perché sur le contrefort du Dikti, célèbre pour son icône miraculeuse de la Vierge Kardiotissa, copie d'un original volé puis exposé à Rome. Fresques byzantines et cour ombragée.",
+          mediaCount: 3,
+        },
+        {
+          id: "p10d", name: "Héraklion (départ)", lat: 35.3383, lng: 25.1724,
+          kind: "ville",
+          context: "Dernier verre et dernière baignade à une quinzaine de minutes de l'aéroport, retour de la voiture et vol vers Lyon. Fin du voyage.",
+          mediaCount: 3,
+        },
+      ],
+    },
+  ],
+};

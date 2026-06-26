@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Build and test both site variants:
+        # - "full":      the complete travel log, every photo visible
+        # - "portfolio": the public book site, which hides every photo
+        #                tagged `family: true`.
+        # The two variants share the same code; only NEXT_PUBLIC_VARIANT
+        # differs, so a regression in the family filter only surfaces here.
+        variant: [full, portfolio]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+        env:
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
+
+      - name: Build (${{ matrix.variant }})
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}

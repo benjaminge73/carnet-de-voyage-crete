@@ -1,0 +1,19 @@
+node_modules/
+.next/
+*.local
+.DS_Store
+tsconfig.tsbuildinfo
+.env
+.env.local
+.claude/worktrees/
+# Photos
+public/photos/*.jpeg
+public/photos/*.jpg
+public/photos/*.png
+public/photos/*.heic
+public/photos
+/photos/
+.vercel
+playwright-report/
+test-results/
+scripts/face-review/family-tags*.json
