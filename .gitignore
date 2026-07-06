@@ -17,3 +17,4 @@ public/photos
 playwright-report/
 test-results/
 scripts/face-review/family-tags*.json
+.codebase-memory/
