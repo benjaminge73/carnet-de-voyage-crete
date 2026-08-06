@@ -10,8 +10,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "06:00"
       timezone: "Europe/Paris"
     open-pull-requests-limit: 5
@@ -21,6 +20,17 @@ updates:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
       include: "scope"
+    ignore:
+      # Next 16 supprime `next lint`, ce qui casse la CI, et les correctifs de
+      # securite disponibles en 16 le sont aussi sur la derniere 15.x — verifie
+      # lors de la bascule de bolossabalos. Sans ce filtre, Dependabot rouvre la
+      # meme PR a chaque passage. A retirer le jour ou la migration du lint est
+      # faite dans une PR dediee.
+      # `update-types` et non `versions` : ainsi un correctif de securite passe
+      # malgre le filtre, ce qui ne serait pas le cas avec une plage de versions.
+      - dependency-name: "next"
+        update-types:
+          - "version-update:semver-major"
     groups:
       prod-minor-patch:
         dependency-type: "production"
@@ -35,8 +45,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
       time: "06:00"
       timezone: "Europe/Paris"
     open-pull-requests-limit: 3
