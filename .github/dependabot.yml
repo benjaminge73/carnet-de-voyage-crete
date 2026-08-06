@@ -21,6 +21,7 @@ updates:
       prefix-development: "chore(deps-dev)"
       include: "scope"
     ignore:
+      # lever-si: decision-humaine rappel-apres: 180j
       # Next 16 supprime `next lint`, ce qui casse la CI, et les correctifs de
       # securite disponibles en 16 le sont aussi sur la derniere 15.x — verifie
       # lors de la bascule de bolossabalos. Sans ce filtre, Dependabot rouvre la
