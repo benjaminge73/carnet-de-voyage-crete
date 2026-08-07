@@ -22,14 +22,25 @@ updates:
       include: "scope"
     ignore:
       # lever-si: decision-humaine rappel-apres: 180j
-      # Next 16 supprime `next lint`, ce qui casse la CI, et les correctifs de
-      # securite disponibles en 16 le sont aussi sur la derniere 15.x — verifie
-      # lors de la bascule de bolossabalos. Sans ce filtre, Dependabot rouvre la
-      # meme PR a chaque passage. A retirer le jour ou la migration du lint est
-      # faite dans une PR dediee.
+      # Pas de majeure de Next sans PR dediee. Le motif ne depend pas de la
+      # version courante : une majeure de framework demande un changelog lu, une
+      # relecture et un deploiement surveille — pas un merge au fil de l'eau.
+      # Historique : Next 16 supprimait `next lint`, ce qui cassait la CI. Ce cas
+      # precis est passe, mais la regle reste — elle protege desormais la 17.
       # `update-types` et non `versions` : ainsi un correctif de securite passe
       # malgre le filtre, ce qui ne serait pas le cas avec une plage de versions.
       - dependency-name: "next"
+        update-types:
+          - "version-update:semver-major"
+      # lever-si: decision-humaine rappel-apres: 180j
+      # `eslint-config-next` suit la version du framework qu'il configure, et ce
+      # repo est reste en Next 15. Sa majeure 16 casse le build ici : mesure sur
+      # la PR #29 le 2026-08-07, `checks (full)` et `checks (portfolio)` en echec.
+      # Le paquet ne declare pas `next` en peer — ses peers sont `eslint` et
+      # `typescript` — donc rien en amont ne l'empeche de monter : ce filtre est
+      # la seule barriere. Il ne gele pas le paquet, la ligne 15.x restant
+      # publiee (15.5.23 au 2026-08-07). A lever avec le filtre `next`.
+      - dependency-name: "eslint-config-next"
         update-types:
           - "version-update:semver-major"
       # lever-si: decision-humaine rappel-apres: 90j
