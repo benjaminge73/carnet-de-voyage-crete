@@ -60,6 +60,48 @@ jobs:
           NEXT_TELEMETRY_DISABLED: '1'
           NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
 
+      # E2E Playwright smoke, "full" variant only (see the matrix comment
+      # above: full vs. portfolio only differ by the family-photo filter,
+      # which isn't what these smoke tests exercise). Blocking: caching the
+      # browser binary alone isn't enough — actions/cache only persists
+      # ~/.cache/ms-playwright, not the apt-installed system libs chromium
+      # needs, so the deps step always runs, cache hit or not. See
+      # Playwright's own CI recipe: https://playwright.dev/docs/ci-intro
+      - name: Cache Playwright browsers
+        if: matrix.variant == 'full'
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright chromium (with system deps)
+        if: matrix.variant == 'full' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (cache hit)
+        if: matrix.variant == 'full' && steps.playwright-cache.outputs.cache-hit == 'true'
+        # Browser binary was restored from cache, but system libs (apt
+        # packages) aren't part of that cache and must still be installed
+        # on every runner.
+        run: npx playwright install-deps chromium
+
+      - name: E2E smoke (${{ matrix.variant }})
+        if: matrix.variant == 'full'
+        run: npm run test:e2e:smoke
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
+
+      - name: Upload e2e report on failure
+        if: failure() && matrix.variant == 'full'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.variant }}
+          path: playwright-report/
+          retention-days: 7
+
   # Merge automatique au vert : PR de l'owner ou de Dependabot (tous types de
   # mises à jour, majors comprises). Remplace l'auto-merge natif GitHub.
   auto-merge:
