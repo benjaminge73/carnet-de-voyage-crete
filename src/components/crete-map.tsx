@@ -183,6 +183,7 @@ function CreteMap({ initialDayId, initialPlaceId, initialRouteMode, selectedPlac
   // Normalise to parent day (e.g. day 2 → day 1) so merged days always select the group
   const [selectedDayId, setSelectedDayId] = useState(getParentDayId(initialDayId ?? 1));
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(initialPlaceId ?? null);
+  const [prevControlledPlaceId, setPrevControlledPlaceId] = useState(controlledPlaceId);
   const [sheetOpen, setSheetOpen] = useState<boolean>(Boolean(initialPlaceId));
   const [mapReady, setMapReady] = useState(false);
 
@@ -214,11 +215,12 @@ function CreteMap({ initialDayId, initialPlaceId, initialRouteMode, selectedPlac
     window.history.replaceState({}, "", url.toString());
   }, [onPlaceClick]);
 
-  // Sync controlled placeId from parent (desktop layout).
-  useEffect(() => {
-    if (controlledPlaceId === undefined) return;
+  // Sync controlled placeId from parent (desktop layout). Adjusted during
+  // render rather than in an effect — see https://react.dev/learn/you-might-not-need-an-effect
+  if (controlledPlaceId !== undefined && controlledPlaceId !== prevControlledPlaceId) {
+    setPrevControlledPlaceId(controlledPlaceId);
     setSelectedPlaceId(controlledPlaceId);
-  }, [controlledPlaceId]);
+  }
 
   useEffect(() => {
     if (typeof window === "undefined" || leafletRef.current) return;
