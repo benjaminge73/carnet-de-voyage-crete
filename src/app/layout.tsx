@@ -21,7 +21,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <head>
-        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+        {/* "robots" is intentionally not duplicated here: the `metadata.robots`
+            export above already makes Next.js inject that exact meta tag. */}
         <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>

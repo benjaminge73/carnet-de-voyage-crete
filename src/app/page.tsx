@@ -13,8 +13,14 @@ import { Icon } from "@/components/icons";
 import { ScrollRestore } from "@/components/scroll-restore";
 import { DesktopApp } from "@/components/desktop/desktop-app";
 
-const COVER_URL =
-  "https://photos.example.com/traveler-1/IMG_7013.jpeg";
+// This repo ships without real media (see README): public/photos is empty
+// and gitignored, and NEXT_PUBLIC_PHOTOS_BASE_URL defaults to a placeholder,
+// unresolvable host. Only build a cover URL when a real photo store is
+// actually configured — otherwise the hero falls back to the gradient alone
+// instead of pointing the browser at a domain that can never resolve.
+const COVER_URL = process.env.NEXT_PUBLIC_PHOTOS_BASE_URL
+  ? `${process.env.NEXT_PUBLIC_PHOTOS_BASE_URL}/traveler-1/IMG_7013.jpeg`
+  : null;
 
 export default function HomePage() {
   const totalPhotos = getTotalPhotoCount();
@@ -43,7 +49,9 @@ export default function HomePage() {
         <div
           className="hero-img"
           style={{
-            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%), url(${COVER_URL})`,
+            backgroundImage: COVER_URL
+              ? `linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%), url(${COVER_URL})`
+              : "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
