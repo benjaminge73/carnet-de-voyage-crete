@@ -60,61 +60,48 @@ jobs:
           NEXT_TELEMETRY_DISABLED: '1'
           NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
 
-      # ═══════════════════════════════════════════════════════════════════
-      # ÉTAPES PLAYWRIGHT DÉSACTIVÉES le 2026-08-17 — décision de Benjamin.
-      #
-      # La suite `e2e/` est commentée (voir l'en-tête de ses fichiers) : la
-      # laisser tourner ici ne produirait plus qu'un « no tests found », donc
-      # une CI rouge. Or on veut l'inverse — une CI verte et des PR Dependabot
-      # qui restent VOLONTAIREMENT bloquées en `review-required`, faute de
-      # preuve e2e digne de ce nom.
-      #
-      # POUR RÉACTIVER : décommenter ce bloc EN MÊME TEMPS que `e2e/*.spec.ts`
-      # et que `e2e_command` côté hermes-custom (`review_checks`).
-      # Suivi : [Plan] Projets Vercel - Tests e2e Playwright
-      # https://app.notion.com/p/3b6b8cc8aa1d819d9120e2d53086d7d7
-      # ═══════════════════════════════════════════════════════════════════
-      # # E2E Playwright smoke, "full" variant only (see the matrix comment
-      # # above: full vs. portfolio only differ by the family-photo filter,
-      # # which isn't what these smoke tests exercise). Blocking: caching the
-      # # browser binary alone isn't enough — actions/cache only persists
-      # # ~/.cache/ms-playwright, not the apt-installed system libs chromium
-      # # needs, so the deps step always runs, cache hit or not. See
-      # # Playwright's own CI recipe: https://playwright.dev/docs/ci-intro
-      # - name: Cache Playwright browsers
-        # if: matrix.variant == 'full'
-        # uses: actions/cache@v6
-        # id: playwright-cache
-        # with:
-          # path: ~/.cache/ms-playwright
-          # key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-#
-      # - name: Install Playwright chromium (with system deps)
-        # if: matrix.variant == 'full' && steps.playwright-cache.outputs.cache-hit != 'true'
-        # run: npx playwright install --with-deps chromium
-#
-      # - name: Install Playwright system deps (cache hit)
-        # if: matrix.variant == 'full' && steps.playwright-cache.outputs.cache-hit == 'true'
-        # # Browser binary was restored from cache, but system libs (apt
-        # # packages) aren't part of that cache and must still be installed
-        # # on every runner.
-        # run: npx playwright install-deps chromium
-#
-      # - name: E2E smoke (${{ matrix.variant }})
-        # if: matrix.variant == 'full'
-        # run: npm run test:e2e:smoke
-        # env:
-          # NEXT_TELEMETRY_DISABLED: '1'
-          # NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
-#
-      # - name: Upload e2e report on failure
-        # if: failure() && matrix.variant == 'full'
-        # continue-on-error: true
-        # uses: actions/upload-artifact@v7
-        # with:
-          # name: playwright-report-${{ matrix.variant }}
-          # path: playwright-report/
-          # retention-days: 7
+      # E2E Playwright smoke, both variants (the family-privacy spec is what
+      # makes "portfolio" worth running here — it's the only assertion that
+      # actually exercises the family-photo filter the matrix comment above
+      # talks about). BLOCKING: caching the browser binary alone isn't
+      # enough — actions/cache only persists ~/.cache/ms-playwright, never
+      # the apt-installed system libs chromium links against, so a bare
+      # `playwright install chromium` can leave the browser unable to
+      # start. The deps step therefore runs on every runner, cache hit or
+      # not. See Playwright's own CI recipe:
+      # https://playwright.dev/docs/ci-intro
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright chromium (with system deps)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        # Browser binary was restored from cache, but system libs (apt
+        # packages) aren't part of that cache and must still be installed
+        # on every runner.
+        run: npx playwright install-deps chromium
+
+      - name: E2E smoke (${{ matrix.variant }})
+        run: npm run test:e2e:smoke
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
+
+      - name: Upload e2e report on failure
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.variant }}
+          path: playwright-report/
+          retention-days: 7
 
   # Merge automatique au vert : PR de l'owner ou de Dependabot (tous types de
   # mises à jour, majors comprises). Remplace l'auto-merge natif GitHub.
