@@ -60,6 +60,57 @@ jobs:
           NEXT_TELEMETRY_DISABLED: '1'
           NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
 
+      # E2E Playwright smoke, both variants (the family-privacy spec is what
+      # makes "portfolio" worth running here — it's the only assertion that
+      # actually exercises the family-photo filter the matrix comment above
+      # talks about). BLOCKING: caching the browser binary alone isn't
+      # enough — actions/cache only persists ~/.cache/ms-playwright, never
+      # the apt-installed system libs chromium links against, so a bare
+      # `playwright install chromium` can leave the browser unable to
+      # start. The deps step therefore runs on every runner, cache hit or
+      # not. See Playwright's own CI recipe:
+      # https://playwright.dev/docs/ci-intro
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright chromium (with system deps)
+        # Borne dure : cette etape a deja pendu 5 h sur un runner (apt bloque),
+        # pendant que le job jumeau de la meme run passait en 3 min. Sans borne,
+        # un blocage consomme le timeout de 6 h du job et la PR reste "en cours"
+        # toute la nuit -- indistinguable d'une CI lente. 10 min est ~3x le temps
+        # observe quand tout va bien.
+        timeout-minutes: 10
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (cache hit)
+        timeout-minutes: 10
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        # Browser binary was restored from cache, but system libs (apt
+        # packages) aren't part of that cache and must still be installed
+        # on every runner.
+        run: npx playwright install-deps chromium
+
+      - name: E2E smoke (${{ matrix.variant }})
+        timeout-minutes: 10
+        run: npm run test:e2e:smoke
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
+
+      - name: Upload e2e report on failure
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.variant }}
+          path: playwright-report/
+          retention-days: 7
+
   # Merge automatique au vert : PR de l'owner ou de Dependabot (tous types de
   # mises à jour, majors comprises). Remplace l'auto-merge natif GitHub.
   auto-merge:

@@ -1,11 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("anti-crawl (smoke)", () => {
+test.describe("anti-crawl @smoke", () => {
   test("/robots.txt disallows everything", async ({ request }) => {
     const res = await request.get("/robots.txt");
     expect(res.status()).toBe(200);
     const body = await res.text();
-    expect(body).toContain("User-agent: *");
+    // Next's MetadataRoute.Robots generator capitalizes "User-Agent";
+    // the robots.txt spec treats directive names as case-insensitive.
+    expect(body).toContain("User-Agent: *");
     expect(body).toContain("Disallow: /");
   });
 
