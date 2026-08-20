@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TRIP, MERGED_INTO, MERGED_FROM, type Day } from "@/data/trip";
 import { DesktopHeader } from "./header";
 import { DesktopSidebar } from "./sidebar";
@@ -40,6 +40,7 @@ export function DesktopApp({
 }) {
   const [selectedDay, setSelectedDay] = useState(getParentDayId(initialDay));
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | undefined>(initialPlaceId);
+  const [prevSelectedDay, setPrevSelectedDay] = useState(selectedDay);
   const [mapMode, setMapMode] = useState<"photos" | "route">("route");
   const [activeNav, setActiveNav] = useState("carte");
 
@@ -48,12 +49,14 @@ export function DesktopApp({
   const place = day.places.find((p) => p.id === selectedPlaceId) ?? day.places[0];
 
   // When day changes (sidebar click), reset selected place to first of new day
-  // unless the selected place still belongs to the new day.
-  useEffect(() => {
+  // unless the selected place still belongs to the new day. Adjusted during
+  // render rather than in an effect — see https://react.dev/learn/you-might-not-need-an-effect
+  if (selectedDay !== prevSelectedDay) {
+    setPrevSelectedDay(selectedDay);
     if (!day.places.find((p) => p.id === selectedPlaceId)) {
       setSelectedPlaceId(day.places[0]?.id);
     }
-  }, [selectedDay, day.places, selectedPlaceId]);
+  }
 
   return (
     <div className="dt-shell">
