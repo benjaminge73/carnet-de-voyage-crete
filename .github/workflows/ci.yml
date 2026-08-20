@@ -78,10 +78,17 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright chromium (with system deps)
+        # Borne dure : cette etape a deja pendu 5 h sur un runner (apt bloque),
+        # pendant que le job jumeau de la meme run passait en 3 min. Sans borne,
+        # un blocage consomme le timeout de 6 h du job et la PR reste "en cours"
+        # toute la nuit -- indistinguable d'une CI lente. 10 min est ~3x le temps
+        # observe quand tout va bien.
+        timeout-minutes: 10
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Install Playwright system deps (cache hit)
+        timeout-minutes: 10
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         # Browser binary was restored from cache, but system libs (apt
         # packages) aren't part of that cache and must still be installed
@@ -89,6 +96,7 @@ jobs:
         run: npx playwright install-deps chromium
 
       - name: E2E smoke (${{ matrix.variant }})
+        timeout-minutes: 10
         run: npm run test:e2e:smoke
         env:
           NEXT_TELEMETRY_DISABLED: '1'
