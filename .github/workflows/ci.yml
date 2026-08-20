@@ -60,6 +60,48 @@ jobs:
           NEXT_TELEMETRY_DISABLED: '1'
           NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
 
+  # Job separe de "checks" (et non des etapes noyees dedans) pour que la garde
+  # nocturne puisse lire la preuve e2e directement depuis GitHub Actions, en
+  # interrogeant un check-run nomme "e2e" -- au lieu de rejouer Playwright sur
+  # le VPS. Necessite un job a part avec un nom stable, distinct de "checks"
+  # (lint/typecheck/tests unitaires/build). Consequence assumee : GitHub
+  # facture chaque job a la minute superieure, donc scinder "checks" en
+  # "checks" + "e2e" coute quelques minutes de plus par run (la matrice
+  # full/portfolio double le nombre de jobs factures). C'est le prix d'un nom
+  # de job stable et lisible de l'exterieur.
+  #
+  # Ce depot reste sur ubuntu-latest (pas de runner self-hosted enregistre
+  # pour lui, contrairement a d'autres depots du parc).
+  e2e:
+    needs: [checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # Meme matrice que "checks" : chaque variante doit etre rebuildee ici
+        # (job/runner distinct, rien n'est partage entre jobs) avant de lancer
+        # sa suite e2e. "portfolio" est la seule variante qui exerce le filtre
+        # des photos family (e2e/family-privacy.spec.ts) -- la perdre viderait
+        # la suite de son assertion la plus importante.
+        variant: [full, portfolio]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: "package.json"
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (${{ matrix.variant }})
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_VARIANT: ${{ matrix.variant }}
+
       # E2E Playwright smoke, both variants (the family-privacy spec is what
       # makes "portfolio" worth running here — it's the only assertion that
       # actually exercises the family-photo filter the matrix comment above
@@ -115,7 +157,7 @@ jobs:
   # mises à jour, majors comprises). Remplace l'auto-merge natif GitHub.
   auto-merge:
     name: auto-merge
-    needs: checks
+    needs: [checks, e2e]
     if: >-
       github.event_name == 'pull_request' &&
       github.event.pull_request.draft == false &&
