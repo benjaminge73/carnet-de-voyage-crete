@@ -18,3 +18,5 @@ playwright-report/
 test-results/
 scripts/face-review/family-tags*.json
 .codebase-memory/
+# Généré par Next.js (next dev/build/typegen) : à ne pas suivre, cf. doc Next « next-env.d.ts »
+next-env.d.ts
