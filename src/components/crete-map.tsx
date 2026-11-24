@@ -243,8 +243,12 @@ function CreteMap({ initialDayId, initialPlaceId, initialRouteMode, selectedPlac
         attributionControl: true,
       });
 
+      // Cle CARTO (publique par conception, visible dans l'URL des tuiles) : sans elle,
+      // CARTO superpose un filigrane. Lue au build (prefixe NEXT_PUBLIC_) ; absente, la carte marche quand meme.
+      const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY;
       L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" +
+          (cartoKey ? `?key=${cartoKey}` : ""),
         {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
           subdomains: "abcd",
